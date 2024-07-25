@@ -152,16 +152,16 @@ mod tests {
 
     fn create_dir_with_image() -> TempDir {
         let dir = tempdir().unwrap();
-        create_dir_all(dir.path().join("content").join("gallery")).unwrap();
-        create_dir_all(dir.path().join("static")).unwrap();
-        create_dir_all(dir.path().join("themes").join("name").join("static")).unwrap();
-        copy("gutenberg.jpg", dir.path().join("content").join("gutenberg.jpg")).unwrap();
-        copy("gutenberg.jpg", dir.path().join("content").join("gallery").join("asset.jpg"))
+        create_dir_all(dir.path().join(libs::consts::CONTENT_DIR).join("gallery")).unwrap();
+        create_dir_all(dir.path().join(libs::consts::STATIC_DIR)).unwrap();
+        create_dir_all(dir.path().join(libs::consts::THEMES_DIR).join("name").join(libs::consts::STATIC_DIR)).unwrap();
+        copy("gutenberg.jpg", dir.path().join(libs::consts::CONTENT_DIR).join("gutenberg.jpg")).unwrap();
+        copy("gutenberg.jpg", dir.path().join(libs::consts::CONTENT_DIR).join("gallery").join("asset.jpg"))
             .unwrap();
-        copy("gutenberg.jpg", dir.path().join("static").join("gutenberg.jpg")).unwrap();
+        copy("gutenberg.jpg", dir.path().join(libs::consts::STATIC_DIR).join("gutenberg.jpg")).unwrap();
         copy(
             "gutenberg.jpg",
-            dir.path().join("themes").join("name").join("static").join("in-theme.jpg"),
+            dir.path().join(libs::consts::THEMES_DIR).join("name").join(libs::consts::STATIC_DIR).join("in-theme.jpg"),
         )
         .unwrap();
         dir
@@ -189,7 +189,7 @@ mod tests {
         // 1. resizing an image in static
         args.insert("path".to_string(), to_value("static/gutenberg.jpg").unwrap());
         let data = static_fn.call(&args).unwrap().as_object().unwrap().clone();
-        let static_path = Path::new("static").join("processed_images");
+        let static_path = Path::new(libs::consts::STATIC_DIR).join("processed_images");
 
         assert_eq!(
             data["static_path"],

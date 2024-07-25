@@ -44,3 +44,40 @@ pub use unicode_segmentation;
 pub use url;
 pub use walkdir;
 pub use webp;
+
+pub mod consts {
+    macro_rules! dirs {
+        (
+            $vis:vis const $id:ident = $v:literal;
+            $($rest:tt)*
+        ) => (
+            $vis const $id: &str = $v;
+            dirs!($($rest)*);
+        );
+        (
+            $vis:vis const ($id:ident, $slashid:ident) = $v:literal;
+            $($rest:tt)*
+        ) => (
+            dirs!($vis const $id = $v;);
+            $vis const $slashid: &str = concat!("/", $v);
+            dirs!($($rest)*);
+        );
+        (
+            $vis:vis const ($id:ident, $slashid:ident, $idslash:ident) = $v:literal;
+            $($rest:tt)*
+        ) => (
+            dirs!($vis const ($id, $slashid) = $v;);
+            $vis const $idslash: &str = concat!($v, "/");
+            dirs!($($rest)*);
+        );
+        () => ();
+    }
+    dirs! {
+        pub const (CONTENT_DIR, SLASH_CONTENT_DIR, CONTENT_DIR_SLASH) = "content";
+        pub const (SASS_DIR, SLASH_SASS_DIR) = "sass";
+        pub const (STATIC_DIR, SLASH_STATIC_DIR) = "static";
+        pub const (TEMPLATES_DIR, SLASH_TEMPLATES_DIR) = "templates";
+        pub const (THEMES_DIR, SLASH_THEMES_DIR) = "themes";
+        pub const PUBLIC_DIR = "public";
+    }
+}

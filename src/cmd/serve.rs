@@ -467,11 +467,11 @@ pub fn serve(
         // the file changes by way of a caching strategy used by editors such as vim.
         // https://github.com/getzola/zola/issues/2266
         (root_dir_str, WatchMode::Required, RecursiveMode::NonRecursive),
-        ("content", WatchMode::Required, RecursiveMode::Recursive),
-        ("sass", WatchMode::Condition(site.config.compile_sass), RecursiveMode::Recursive),
-        ("static", WatchMode::Optional, RecursiveMode::Recursive),
-        ("templates", WatchMode::Optional, RecursiveMode::Recursive),
-        ("themes", WatchMode::Condition(site.config.theme.is_some()), RecursiveMode::Recursive),
+        (libs::consts::CONTENT_DIR, WatchMode::Required, RecursiveMode::Recursive),
+        (libs::consts::SASS_DIR, WatchMode::Condition(site.config.compile_sass), RecursiveMode::Recursive),
+        (libs::consts::STATIC_DIR, WatchMode::Optional, RecursiveMode::Recursive),
+        (libs::consts::TEMPLATES_DIR, WatchMode::Optional, RecursiveMode::Recursive),
+        (libs::consts::THEMES_DIR, WatchMode::Condition(site.config.theme.is_some()), RecursiveMode::Recursive),
     ];
 
     // Setup watchers
@@ -905,7 +905,7 @@ mod tests {
         assert_ne!(site.live_reload, None);
         assert_ne!(site.live_reload, Some(1111));
         assert_eq!(site.output_path, root_dir.join(&site.config.output_dir));
-        assert_eq!(site.static_path, root_dir.join("static"));
+        assert_eq!(site.static_path, root_dir.join(libs::consts::STATIC_DIR));
 
         let base_url = Url::parse(&expected_base_url).unwrap();
         for (_, permalink) in site.permalinks {

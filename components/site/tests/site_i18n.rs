@@ -19,17 +19,17 @@ fn can_parse_multilingual_site() {
 
     // default index sections
     let default_index_section =
-        library.sections.get(&path.join("content").join("_index.md")).unwrap();
+        library.sections.get(&path.join(libs::consts::CONTENT_DIR).join("_index.md")).unwrap();
     assert_eq!(default_index_section.pages.len(), 1);
     assert!(default_index_section.ancestors.is_empty());
 
     let fr_index_section =
-        library.sections.get(&path.join("content").join("_index.fr.md")).unwrap();
+        library.sections.get(&path.join(libs::consts::CONTENT_DIR).join("_index.fr.md")).unwrap();
     assert_eq!(fr_index_section.pages.len(), 1);
     assert!(fr_index_section.ancestors.is_empty());
 
     // blog sections get only their own language pages
-    let blog_path = path.join("content").join("blog");
+    let blog_path = path.join(libs::consts::CONTENT_DIR).join("blog");
 
     let default_blog = library.sections.get(&blog_path.join("_index.md")).unwrap();
     assert_eq!(default_blog.subsections.len(), 0);

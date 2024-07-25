@@ -123,7 +123,7 @@ pub struct Processor {
 impl Processor {
     pub fn new(base_path: PathBuf, config: &Config) -> Processor {
         Processor {
-            output_dir: base_path.join("static").join(RESIZED_SUBDIR),
+            output_dir: base_path.join(libs::consts::STATIC_DIR).join(RESIZED_SUBDIR),
             base_url: config.make_permalink(RESIZED_SUBDIR),
             img_ops: HashSet::default(),
             meta_cache: HashMap::default(),
@@ -159,7 +159,7 @@ impl Processor {
         // Now we have all the data we need to generate the output filename and the response
         let filename = get_processed_filename(&input_path, &input_src, &op, &format);
         let url = format!("{}{}", self.base_url, filename);
-        let static_path = Path::new("static").join(RESIZED_SUBDIR).join(&filename);
+        let static_path = Path::new(libs::consts::STATIC_DIR).join(RESIZED_SUBDIR).join(&filename);
         let output_path = self.output_dir.join(&filename);
         let instr = ResizeInstructions::new(op, meta.size);
         let enqueue_response = EnqueueResponse::new(url, static_path, meta, &instr);

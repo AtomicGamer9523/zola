@@ -45,7 +45,7 @@ pub fn build_site(name: &str) -> (Site, TempDir, PathBuf) {
     let mut site = Site::new(&path, &config_file).unwrap();
     site.load().unwrap();
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     site.build().expect("Couldn't build the site");
     (site, tmp_dir, public.clone())
@@ -65,7 +65,7 @@ where
         site.load().unwrap();
     }
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     site.build().expect("Couldn't build the site");
     (site, tmp_dir, public.clone())
@@ -153,7 +153,7 @@ pub fn find_expected_translations(
 ) -> HashMap<String, Vec<String>> {
     let mut path = env::current_dir().unwrap().parent().unwrap().parent().unwrap().to_path_buf();
     path.push(name);
-    path.push("content");
+    path.push(libs::consts::CONTENT_DIR);
 
     // Find expected translations from content folder
     // We remove BASEDIR/content/ from the keys so they match paths in library
@@ -187,10 +187,10 @@ impl Translations {
         let library = library.read().unwrap();
         // WORKAROUND because site.content_path is private
         let unified_path =
-            if let Some(page) = library.pages.get(&site.base_path.join("content").join(path)) {
+            if let Some(page) = library.pages.get(&site.base_path.join(libs::consts::CONTENT_DIR).join(path)) {
                 page.file.canonical.clone()
             } else if let Some(section) =
-                library.sections.get(&site.base_path.join("content").join(path))
+                library.sections.get(&site.base_path.join(libs::consts::CONTENT_DIR).join(path))
             {
                 section.file.canonical.clone()
             } else {

@@ -275,7 +275,7 @@ impl Page {
                 path.pop();
                 path.push(filename);
                 path = path
-                    .strip_prefix(&base_path.join("content"))
+                    .strip_prefix(&base_path.join(libs::consts::CONTENT_DIR))
                     .expect("Should be able to stripe prefix")
                     .to_path_buf();
                 path
@@ -580,9 +580,9 @@ And here's another. [^3]
     fn page_with_assets_gets_right_info() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        create_dir(&path.join("content").join("posts")).expect("create posts temp dir");
-        let nested_path = path.join("content").join("posts").join("with-assets");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        create_dir(&path.join(libs::consts::CONTENT_DIR).join("posts")).expect("create posts temp dir");
+        let nested_path = path.join(libs::consts::CONTENT_DIR).join("posts").join("with-assets");
         create_dir(&nested_path).expect("create nested temp dir");
         let mut f = File::create(nested_path.join("index.md")).unwrap();
         f.write_all(b"+++\n+++\n").unwrap();
@@ -593,7 +593,7 @@ And here's another. [^3]
         let res = Page::from_file(nested_path.join("index.md").as_path(), &Config::default(), path);
         assert!(res.is_ok());
         let page = res.unwrap();
-        assert_eq!(page.file.parent, path.join("content").join("posts"));
+        assert_eq!(page.file.parent, path.join(libs::consts::CONTENT_DIR).join("posts"));
         assert_eq!(page.slug, "with-assets");
         assert_eq!(page.assets.len(), 3);
         assert!(page.serialized_assets[0].starts_with('/'));
@@ -604,9 +604,9 @@ And here's another. [^3]
     fn page_with_assets_and_slug_overrides_path() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        create_dir(&path.join("content").join("posts")).expect("create posts temp dir");
-        let nested_path = path.join("content").join("posts").join("with-assets");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        create_dir(&path.join(libs::consts::CONTENT_DIR).join("posts")).expect("create posts temp dir");
+        let nested_path = path.join(libs::consts::CONTENT_DIR).join("posts").join("with-assets");
         create_dir(&nested_path).expect("create nested temp dir");
         let mut f = File::create(nested_path.join("index.md")).unwrap();
         f.write_all(b"+++\nslug=\"hey\"\n+++\n").unwrap();
@@ -617,7 +617,7 @@ And here's another. [^3]
         let res = Page::from_file(nested_path.join("index.md").as_path(), &Config::default(), path);
         assert!(res.is_ok());
         let page = res.unwrap();
-        assert_eq!(page.file.parent, path.join("content").join("posts"));
+        assert_eq!(page.file.parent, path.join(libs::consts::CONTENT_DIR).join("posts"));
         assert_eq!(page.slug, "hey");
         assert_eq!(page.assets.len(), 3);
         assert_eq!(page.permalink, "http://a-website.com/posts/hey/");
@@ -628,9 +628,9 @@ And here's another. [^3]
     fn page_with_assets_uses_filepath_for_assets() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        create_dir(&path.join("content").join("posts")).expect("create posts temp dir");
-        let nested_path = path.join("content").join("posts").join("with_assets");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        create_dir(&path.join(libs::consts::CONTENT_DIR).join("posts")).expect("create posts temp dir");
+        let nested_path = path.join(libs::consts::CONTENT_DIR).join("posts").join("with_assets");
         create_dir(&nested_path).expect("create nested temp dir");
         let mut f = File::create(nested_path.join("index.md")).unwrap();
         f.write_all(b"+++\n+++\n").unwrap();
@@ -641,7 +641,7 @@ And here's another. [^3]
         let res = Page::from_file(nested_path.join("index.md").as_path(), &Config::default(), path);
         assert!(res.is_ok());
         let page = res.unwrap();
-        assert_eq!(page.file.parent, path.join("content").join("posts"));
+        assert_eq!(page.file.parent, path.join(libs::consts::CONTENT_DIR).join("posts"));
         assert_eq!(page.assets.len(), 3);
         assert_eq!(page.serialized_assets.len(), 3);
         // We should not get with-assets since that's the slugified version
@@ -654,9 +654,9 @@ And here's another. [^3]
     fn page_with_assets_and_date_in_folder_name() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        create_dir(&path.join("content").join("posts")).expect("create posts temp dir");
-        let nested_path = path.join("content").join("posts").join("2013-06-02_with-assets");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        create_dir(&path.join(libs::consts::CONTENT_DIR).join("posts")).expect("create posts temp dir");
+        let nested_path = path.join(libs::consts::CONTENT_DIR).join("posts").join("2013-06-02_with-assets");
         create_dir(&nested_path).expect("create nested temp dir");
         let mut f = File::create(nested_path.join("index.md")).unwrap();
         f.write_all(b"+++\n\n+++\n").unwrap();
@@ -667,7 +667,7 @@ And here's another. [^3]
         let res = Page::from_file(nested_path.join("index.md").as_path(), &Config::default(), path);
         assert!(res.is_ok());
         let page = res.unwrap();
-        assert_eq!(page.file.parent, path.join("content").join("posts"));
+        assert_eq!(page.file.parent, path.join(libs::consts::CONTENT_DIR).join("posts"));
         assert_eq!(page.slug, "with-assets");
         assert_eq!(page.meta.date, Some("2013-06-02".to_string()));
         assert_eq!(page.assets.len(), 3);
@@ -678,9 +678,9 @@ And here's another. [^3]
     fn page_with_ignored_assets_filters_out_correct_files() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        create_dir(&path.join("content").join("posts")).expect("create posts temp dir");
-        let nested_path = path.join("content").join("posts").join("with-assets");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        create_dir(&path.join(libs::consts::CONTENT_DIR).join("posts")).expect("create posts temp dir");
+        let nested_path = path.join(libs::consts::CONTENT_DIR).join("posts").join("with-assets");
         create_dir(&nested_path).expect("create nested temp dir");
         let mut f = File::create(nested_path.join("index.md")).unwrap();
         f.write_all(b"+++\nslug=\"hey\"\n+++\n").unwrap();
@@ -706,8 +706,8 @@ And here's another. [^3]
     fn colocated_page_with_slug_and_date_in_path() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        let articles_path = path.join("content").join("articles");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        let articles_path = path.join(libs::consts::CONTENT_DIR).join("articles");
         create_dir(&articles_path).expect("create posts temp dir");
 
         let config = Config::default();

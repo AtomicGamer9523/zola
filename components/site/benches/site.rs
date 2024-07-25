@@ -21,7 +21,7 @@ fn setup_site(name: &str) -> Site {
 fn bench_render_aliases(b: &mut test::Bencher) {
     let mut site = setup_site("big-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     b.iter(|| site.render_aliases().unwrap());
 }
@@ -30,7 +30,7 @@ fn bench_render_aliases(b: &mut test::Bencher) {
 fn bench_render_sitemap(b: &mut test::Bencher) {
     let mut site = setup_site("big-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     b.iter(|| site.render_sitemap().unwrap());
 }
@@ -39,7 +39,7 @@ fn bench_render_sitemap(b: &mut test::Bencher) {
 fn bench_render_feed(b: &mut test::Bencher) {
     let mut site = setup_site("big-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     b.iter(|| {
         site.render_feeds(
@@ -56,7 +56,7 @@ fn bench_render_feed(b: &mut test::Bencher) {
 fn bench_render_taxonomies(b: &mut test::Bencher) {
     let mut site = setup_site("small-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     b.iter(|| site.render_taxonomies().unwrap());
 }
@@ -65,7 +65,7 @@ fn bench_render_taxonomies(b: &mut test::Bencher) {
 fn bench_render_paginated(b: &mut test::Bencher) {
     let mut site = setup_site("small-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
     let library = site.library.read().unwrap();
     let section = library.sections.values().collect::<Vec<_>>()[0];
@@ -78,7 +78,7 @@ fn bench_render_paginated(b: &mut test::Bencher) {
 fn bench_populate_sections_medium_blog(b: &mut test::Bencher) {
     let mut site = setup_site("medium-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
 
     b.iter(|| site.populate_sections());
@@ -88,7 +88,7 @@ fn bench_populate_sections_medium_blog(b: &mut test::Bencher) {
 fn bench_populate_sections_medium_kb(b: &mut test::Bencher) {
     let mut site = setup_site("medium-kb");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
 
     b.iter(|| site.populate_sections());
@@ -98,7 +98,7 @@ fn bench_populate_sections_medium_kb(b: &mut test::Bencher) {
 fn bench_render_markdown_small_blog(b: &mut test::Bencher) {
     let mut site = setup_site("small-blog");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
 
     b.iter(|| site.render_markdown());
@@ -108,7 +108,7 @@ fn bench_render_markdown_small_blog(b: &mut test::Bencher) {
 fn bench_render_markdown_small_kb(b: &mut test::Bencher) {
     let mut site = setup_site("small-kb");
     let tmp_dir = tempdir().expect("create temp dir");
-    let public = &tmp_dir.path().join("public");
+    let public = &tmp_dir.path().join(libs::consts::PUBLIC_DIR);
     site.set_output_path(&public);
 
     b.iter(|| site.render_markdown());

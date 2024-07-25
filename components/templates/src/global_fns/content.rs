@@ -121,7 +121,7 @@ impl GetPage {
         library: Arc<RwLock<Library>>,
     ) -> Self {
         Self {
-            base_path: base_path.join("content"),
+            base_path: base_path.join(libs::consts::CONTENT_DIR),
             default_lang: default_lang.to_string(),
             supported_languages,
             library,
@@ -174,7 +174,7 @@ impl GetSection {
         library: Arc<RwLock<Library>>,
     ) -> Self {
         Self {
-            base_path: base_path.join("content"),
+            base_path: base_path.join(libs::consts::CONTENT_DIR),
             default_lang: default_lang.to_string(),
             supported_languages,
             library,

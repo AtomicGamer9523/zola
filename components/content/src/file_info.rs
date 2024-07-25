@@ -17,7 +17,7 @@ pub fn find_content_components<P: AsRef<Path>>(path: P) -> Vec<String> {
             continue;
         }
 
-        if component == "content" {
+        if component == libs::consts::CONTENT_DIR {
             is_in_content = true;
         }
     }

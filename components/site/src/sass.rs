@@ -14,7 +14,7 @@ pub fn compile_sass(base_path: &Path, output_path: &Path) -> Result<()> {
 
     let sass_path = {
         let mut sass_path = PathBuf::from(base_path);
-        sass_path.push("sass");
+        sass_path.push(libs::consts::SASS_DIR);
         sass_path
     };
 
@@ -79,7 +79,7 @@ mod tests {
         let mut path =
             env::current_dir().unwrap().parent().unwrap().parent().unwrap().to_path_buf();
         path.push("test_site");
-        path.push("sass");
+        path.push(libs::consts::SASS_DIR);
 
         let result = get_non_partial_scss(&path);
 
@@ -96,7 +96,7 @@ mod tests {
         path.push("test_site");
         path.push("_dir_with_underscores");
         path.push("..");
-        path.push("sass");
+        path.push(libs::consts::SASS_DIR);
 
         let result = get_non_partial_scss(&path);
 

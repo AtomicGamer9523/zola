@@ -50,7 +50,7 @@ pub fn check_internal_links_with_anchors(site: &Site) -> Vec<String> {
         // There are a few `expect` here since the presence of the .md file will
         // already have been checked in the markdown rendering
         let mut full_path = site.base_path.clone();
-        full_path.push("content");
+        full_path.push(libs::consts::CONTENT_DIR);
         for part in md_path.split('/') {
             full_path.push(part);
         }

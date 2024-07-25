@@ -43,8 +43,11 @@ pub fn render_redirect_template(url: &str, tera: &Tera) -> Result<String> {
 }
 
 pub fn load_tera(path: &Path, config: &Config) -> Result<Tera> {
-    let tpl_glob =
-        format!("{}/{}", path.to_string_lossy().replace('\\', "/"), "templates/**/*.{*ml,md}");
+    let tpl_glob = format!("{}/{}{}",
+        path.to_string_lossy().replace('\\', "/"),
+        libs::consts::TEMPLATES_DIR,
+        "/**/*.{*ml,md}"
+    );
 
     // Only parsing as we might be extending templates from themes and that would error
     // as we haven't loaded them yet
@@ -53,8 +56,8 @@ pub fn load_tera(path: &Path, config: &Config) -> Result<Tera> {
 
     if let Some(ref theme) = config.theme {
         // Test that the templates folder exist for that theme
-        let theme_path = path.join("themes").join(theme);
-        if !theme_path.join("templates").exists() {
+        let theme_path = path.join(libs::consts::THEMES_DIR).join(theme);
+        if !theme_path.join(libs::consts::TEMPLATES_DIR).exists() {
             bail!("Theme `{}` is missing a templates folder", theme);
         }
 
@@ -68,9 +71,9 @@ pub fn load_tera(path: &Path, config: &Config) -> Result<Tera> {
         rewrite_theme_paths(&mut tera_theme, theme);
 
         // TODO: add tests for theme-provided robots.txt (https://github.com/getzola/zola/pull/1722)
-        if theme_path.join("templates").join("robots.txt").exists() {
+        if theme_path.join(libs::consts::TEMPLATES_DIR).join("robots.txt").exists() {
             tera_theme.add_template_file(
-                theme_path.join("templates").join("robots.txt"),
+                theme_path.join(libs::consts::TEMPLATES_DIR).join("robots.txt"),
                 Some("robots.txt"),
             )?;
         }
@@ -79,8 +82,8 @@ pub fn load_tera(path: &Path, config: &Config) -> Result<Tera> {
     tera.extend(&ZOLA_TERA)?;
     tera.build_inheritance_chains()?;
 
-    if path.join("templates").join("robots.txt").exists() {
-        tera.add_template_file(path.join("templates").join("robots.txt"), Some("robots.txt"))?;
+    if path.join(libs::consts::TEMPLATES_DIR).join("robots.txt").exists() {
+        tera.add_template_file(path.join(libs::consts::TEMPLATES_DIR).join("robots.txt"), Some("robots.txt"))?;
     }
 
     Ok(tera)

@@ -358,7 +358,7 @@ title = "A title"
     #[test]
     fn can_link_to_file_in_output_path() {
         let dir = create_temp_dir();
-        let public = dir.path().join("public");
+        let public = dir.path().join(libs::consts::PUBLIC_DIR);
         create_dir(&public).expect("Failed to create output directory");
         create_file(&public.join("style.css"), "// Hello world")
             .expect("Failed to create file in output directory");

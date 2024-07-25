@@ -22,7 +22,7 @@ fn can_parse_site() {
 
     // Correct number of pages (sections do not count as pages, draft are ignored)
     assert_eq!(library.pages.len(), 36);
-    let posts_path = path.join("content").join("posts");
+    let posts_path = path.join(libs::consts::CONTENT_DIR).join("posts");
 
     // Make sure the page with a url doesn't have any sections
     let url_post = library.pages.get(&posts_path.join("fixed-url.md")).unwrap();
@@ -37,7 +37,7 @@ fn can_parse_site() {
     assert_eq!(library.sections.len(), 13);
 
     // And that the sections are correct
-    let index_section = library.sections.get(&path.join("content").join("_index.md")).unwrap();
+    let index_section = library.sections.get(&path.join(libs::consts::CONTENT_DIR).join("_index.md")).unwrap();
     assert_eq!(index_section.subsections.len(), 5);
     assert_eq!(index_section.pages.len(), 5);
     assert!(index_section.ancestors.is_empty());
@@ -512,7 +512,7 @@ fn can_build_site_with_pagination_for_index() {
             {
                 let index = library
                     .sections
-                    .get_mut(&site.base_path.join("content").join("_index.md"))
+                    .get_mut(&site.base_path.join(libs::consts::CONTENT_DIR).join("_index.md"))
                     .unwrap();
                 index.meta.paginate_by = Some(2);
                 index.meta.template = Some("index_paginated.html".to_string());
@@ -719,7 +719,7 @@ fn can_apply_page_templates() {
     let mut site = Site::new(&path, &config_file).unwrap();
     site.load().unwrap();
 
-    let template_path = path.join("content").join("applying_page_template");
+    let template_path = path.join(libs::consts::CONTENT_DIR).join("applying_page_template");
     let library = site.library.read().unwrap();
 
     let template_section = library.sections.get(&template_path.join("_index.md")).unwrap();
@@ -864,7 +864,7 @@ fn can_find_site_and_page_authors() {
     let author = site.config.author;
     assert_eq!(Some("config@example.com (Config Author)".to_string()), author);
 
-    let posts_path = path.join("content").join("posts");
+    let posts_path = path.join(libs::consts::CONTENT_DIR).join("posts");
     let posts_section = library.sections.get(&posts_path.join("_index.md")).unwrap();
 
     let p1 = &library.pages[&posts_section.pages[0]];

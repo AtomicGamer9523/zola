@@ -142,10 +142,16 @@ impl Config {
         config.slugify_taxonomies();
         config.link_checker.resolve_globset()?;
 
-        let content_glob_set = build_ignore_glob_set(&config.ignored_content, "content")?;
+        let content_glob_set = build_ignore_glob_set(
+            &config.ignored_content,
+            libs::consts::CONTENT_DIR
+        )?;
         config.ignored_content_globset = Some(content_glob_set);
 
-        let static_glob_set = build_ignore_glob_set(&config.ignored_static, "static")?;
+        let static_glob_set = build_ignore_glob_set(
+            &config.ignored_static,
+            libs::consts::STATIC_DIR
+        )?;
         config.ignored_static_globset = Some(static_glob_set);
 
         Ok(config)
@@ -388,7 +394,7 @@ impl Default for Config {
             ignored_static: Vec::new(),
             ignored_static_globset: None,
             translations: HashMap::new(),
-            output_dir: "public".to_string(),
+            output_dir: libs::consts::PUBLIC_DIR.to_string(),
             preserve_dotfiles_in_output: false,
             link_checker: link_checker::LinkChecker::default(),
             slugify: slugify::Slugify::default(),
@@ -899,7 +905,7 @@ base_url = "https://replace-this-with-your-url.com"
         "#;
 
         let config = Config::parse(config).unwrap();
-        assert_eq!(config.output_dir, "public".to_string());
+        assert_eq!(config.output_dir, libs::consts::PUBLIC_DIR);
     }
 
     #[test]

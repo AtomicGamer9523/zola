@@ -251,9 +251,9 @@ mod tests {
     fn section_with_assets_gets_right_info() {
         let tmp_dir = tempdir().expect("create temp dir");
         let path = tmp_dir.path();
-        create_dir(&path.join("content")).expect("create content temp dir");
-        create_dir(&path.join("content").join("posts")).expect("create posts temp dir");
-        let nested_path = path.join("content").join("posts").join("with-assets");
+        create_dir(&path.join(libs::consts::CONTENT_DIR)).expect("create content temp dir");
+        create_dir(&path.join(libs::consts::CONTENT_DIR).join("posts")).expect("create posts temp dir");
+        let nested_path = path.join(libs::consts::CONTENT_DIR).join("posts").join("with-assets");
         create_dir(&nested_path).expect("create nested temp dir");
         let mut f = File::create(nested_path.join("_index.md")).unwrap();
         f.write_all(b"+++\n+++\n").unwrap();

@@ -717,12 +717,12 @@ mod tests {
     #[test]
     fn can_handle_various_local_file_locations() {
         let dir = tempdir().unwrap();
-        create_dir_all(dir.path().join("content").join("gallery")).unwrap();
-        create_dir_all(dir.path().join("static")).unwrap();
-        copy(get_test_file("test.css"), dir.path().join("content").join("test.css")).unwrap();
-        copy(get_test_file("test.css"), dir.path().join("content").join("gallery").join("new.css"))
+        create_dir_all(dir.path().join(libs::consts::CONTENT_DIR).join("gallery")).unwrap();
+        create_dir_all(dir.path().join(libs::consts::STATIC_DIR)).unwrap();
+        copy(get_test_file("test.css"), dir.path().join(libs::consts::CONTENT_DIR).join("test.css")).unwrap();
+        copy(get_test_file("test.css"), dir.path().join(libs::consts::CONTENT_DIR).join("gallery").join("new.css"))
             .unwrap();
-        copy(get_test_file("test.css"), dir.path().join("static").join("test.css")).unwrap();
+        copy(get_test_file("test.css"), dir.path().join(libs::consts::STATIC_DIR).join("test.css")).unwrap();
 
         let static_fn = LoadData::new(dir.path().to_path_buf(), None, PathBuf::new());
         let mut args = HashMap::new();

@@ -22,12 +22,12 @@ pub fn search_for_file(
     output_path: &Path,
 ) -> Result<Option<(PathBuf, String)>> {
     let mut search_paths =
-        vec![base_path.join("static"), base_path.join("content"), base_path.join(output_path)];
+        vec![base_path.join(libs::consts::STATIC_DIR), base_path.join(libs::consts::CONTENT_DIR), base_path.join(output_path)];
     if let Some(t) = theme {
-        search_paths.push(base_path.join("themes").join(t).join("static"));
+        search_paths.push(base_path.join(libs::consts::THEMES_DIR).join(t).join(libs::consts::STATIC_DIR));
     }
     let actual_path = if path.starts_with("@/") {
-        Cow::Owned(path.replace("@/", "content/"))
+        Cow::Owned(path.replace("@/", libs::consts::CONTENT_DIR_SLASH))
     } else {
         Cow::Borrowed(path.trim_start_matches('/'))
     };

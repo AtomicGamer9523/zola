@@ -135,15 +135,15 @@ fn detect_change_kind(pwd: &Path, path: &Path, config_path: &Path) -> (ChangeKin
     let mut partial_path = PathBuf::from("/");
     partial_path.push(path.strip_prefix(pwd).unwrap_or(path));
 
-    let change_kind = if partial_path.starts_with("/templates") {
+    let change_kind = if partial_path.starts_with(libs::consts::SLASH_TEMPLATES_DIR) {
         ChangeKind::Templates
-    } else if partial_path.starts_with("/themes") {
+    } else if partial_path.starts_with(libs::consts::SLASH_THEMES_DIR) {
         ChangeKind::Themes
-    } else if partial_path.starts_with("/content") {
+    } else if partial_path.starts_with(libs::consts::SLASH_CONTENT_DIR) {
         ChangeKind::Content
-    } else if partial_path.starts_with("/static") {
+    } else if partial_path.starts_with(libs::consts::SLASH_STATIC_DIR) {
         ChangeKind::StaticFiles
-    } else if partial_path.starts_with("/sass") {
+    } else if partial_path.starts_with(libs::consts::SLASH_SASS_DIR) {
         ChangeKind::Sass
     } else if path == config_path {
         ChangeKind::Config
@@ -299,7 +299,8 @@ mod tests {
     fn relative_path() {
         let expected = (ChangeKind::Templates, PathBuf::from("/templates/hello.html"));
         let pwd = Path::new("/home/johan/site");
-        let path = Path::new("templates/hello.html");
+        let path = format!("{}/hello.html", libs::consts::TEMPLATES_DIR);
+        let path = Path::new(&path);
         let config_filename = Path::new("config.toml");
         assert_eq!(expected, detect_change_kind(pwd, path, config_filename));
     }

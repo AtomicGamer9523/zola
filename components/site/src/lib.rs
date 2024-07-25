@@ -77,16 +77,16 @@ impl Site {
 
         if let Some(theme) = config.theme.clone() {
             // Grab data from the extra section of the theme
-            config.merge_with_theme(path.join("themes").join(&theme).join("theme.toml"), &theme)?;
+            config.merge_with_theme(path.join(libs::consts::THEMES_DIR).join(&theme).join("theme.toml"), &theme)?;
         }
 
         let tera = load_tera(path, &config)?;
         let shortcode_definitions = utils::templates::get_shortcodes(&tera);
 
-        let content_path = path.join("content");
-        let sass_path = path.join("sass");
-        let static_path = path.join("static");
-        let templates_path = path.join("templates");
+        let content_path = path.join(libs::consts::CONTENT_DIR);
+        let sass_path = path.join(libs::consts::SASS_DIR);
+        let static_path = path.join(libs::consts::STATIC_DIR);
+        let templates_path = path.join(libs::consts::TEMPLATES_DIR);
         let imageproc = imageproc::Processor::new(path.to_path_buf(), &config);
         let output_path = path.join(config.output_dir.clone());
 
@@ -175,7 +175,7 @@ impl Site {
         // which we can only decide to use after we've deserialised the section
         // so it's kinda necessecary
         let mut dir_walker =
-            WalkDir::new(self.base_path.join("content")).follow_links(true).into_iter();
+            WalkDir::new(self.base_path.join(libs::consts::CONTENT_DIR)).follow_links(true).into_iter();
         let mut allowed_index_filenames: Vec<_> = self
             .config
             .other_languages()
@@ -589,7 +589,7 @@ impl Site {
         // The user files will overwrite the theme files
         if let Some(ref theme) = self.config.theme {
             copy_directory(
-                &self.base_path.join("themes").join(theme).join("static"),
+                &self.base_path.join(libs::consts::THEMES_DIR).join(theme).join(libs::consts::STATIC_DIR),
                 &self.output_path,
                 false,
                 None,
@@ -718,8 +718,8 @@ impl Site {
 
         // Generate/move all assets before markdown any content
         if let Some(ref theme) = self.config.theme {
-            let theme_path = self.base_path.join("themes").join(theme);
-            if theme_path.join("sass").exists() {
+            let theme_path = self.base_path.join(libs::consts::THEMES_DIR).join(theme);
+            if theme_path.join(libs::consts::SASS_DIR).exists() {
                 sass::compile_sass(&theme_path, &self.output_path)?;
                 start = log_time(start, "Compiled theme Sass");
             }

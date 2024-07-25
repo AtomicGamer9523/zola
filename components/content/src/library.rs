@@ -521,7 +521,7 @@ mod tests {
         for (p, l, s) in pages.clone() {
             library.insert_page(create_page(p, l, s));
         }
-        library.populate_sections(&config, Path::new("content"));
+        library.populate_sections(&config, Path::new(libs::consts::CONTENT_DIR));
         assert_eq!(library.sections.len(), sections.len());
         assert_eq!(library.pages.len(), pages.len());
         let blog_section = &library.sections[&PathBuf::from("content/blog/_index.md")];
